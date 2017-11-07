@@ -8,7 +8,7 @@ install:
   - make bootstrap
 
 script:
-  - make test
+  - make test_ci
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

@@ -40,4 +40,3 @@ clean:
 .PHONY: lint
 lint:
 	$(flake8) $(projects) tests
-	./scripts/check-license.sh

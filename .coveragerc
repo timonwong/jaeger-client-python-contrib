@@ -1,5 +1,10 @@
 [run]
 branch = True
 
+[report]
+omit =
+  jaeger_client_contrib/thrift_gen/*
+  jaeger_client_contrib/thrift_gen/*/*
+
 [xml]
 output = coverage.xml

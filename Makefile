@@ -40,3 +40,19 @@ clean:
 .PHONY: lint
 lint:
 	$(flake8) $(projects) tests
+
+# Generate zipkin thrifts
+THRIFT_GEN_DIR=jaeger_client_contrib/thrift_gen
+THRIFT_VER=0.9.3
+THRIFT_IMG=thrift:$(THRIFT_VER)
+THRIFT_PY_ARGS=new_style,tornado
+THRIFT=docker run -v "${PWD}:/data" $(THRIFT_IMG) thrift
+
+.PHONY: thrift-image
+thrift-image:
+	$(THRIFT) -version
+
+.PHONY: thrift
+thrift: thrift-image
+	${THRIFT} -o /data --gen py:${THRIFT_PY_ARGS} -out /data/$(THRIFT_GEN_DIR) /data/idl/thrift/zipkincore.thrift
+	rm -rf ${THRIFT_GEN_DIR}/*/*-remote

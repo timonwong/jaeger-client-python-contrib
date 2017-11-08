@@ -20,16 +20,13 @@ import six
 import tornado.gen
 import tornado.ioloop
 import tornado.queues
-from thrift.protocol.TBinaryProtocol import TBinaryProtocol
-from thrift.transport.TTransport import TMemoryBuffer
-from thrift.Thrift import TType
-
 from jaeger_client import ioloop_util
 from jaeger_client.constants import DEFAULT_FLUSH_INTERVAL
 from jaeger_client.metrics import LegacyMetricsFactory, Metrics
 from jaeger_client.reporter import NullReporter, ReporterMetrics
-from jaeger_client.thrift import make_zipkin_spans
 from jaeger_client.utils import ErrorReporter
+
+from ..thrift import make_zipkin_spans, thrift_objs_in_bytes
 
 
 default_logger = logging.getLogger('jaeger_tracing')
@@ -171,18 +168,3 @@ class ZipkinReporter(NullReporter):
     def _flush(self):
         yield self.queue.put(self.stop)
         yield self.queue.join()
-
-
-def thrift_objs_in_bytes(thrift_obj_list):
-    """
-    Returns TBinaryProtocol encoded Thrift objects.
-
-    :param thrift_obj_list: thrift objects list to encode
-    :returns: thrift objects in TBinaryProtocol format bytes.
-    """
-    transport = TMemoryBuffer()
-    protocol = TBinaryProtocol(transport)
-    protocol.writeListBegin(TType.STRUCT, len(thrift_obj_list))
-    for thrift_obj in thrift_obj_list:
-        thrift_obj.write(protocol)
-    return bytes(transport.getvalue())

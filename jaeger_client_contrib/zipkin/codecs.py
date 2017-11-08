@@ -30,7 +30,9 @@ DEBUG_FLAG = 2
 
 
 def to_lower_hex(v):
-    return '{:016x}'.format(v)
+    if (v >> 64) == 0:
+        return '{:016x}'.format(v)
+    return '{:032x}'.format(v)
 
 
 def from_lower_hex(v):

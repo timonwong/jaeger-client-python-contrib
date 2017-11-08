@@ -7,6 +7,16 @@ from jaeger_client_contrib.zipkin import codecs
 
 
 class TestB3Codec(unittest.TestCase):
+    def test_to_lower_hex(self):
+        assert '0' * 16 == codecs.to_lower_hex(0)
+        assert ('0' * 15) + ('f' * 17) == \
+            codecs.to_lower_hex(0xfffffffffffffffffL)
+
+    def test_from_lower_hex(self):
+        assert 1 == codecs.from_lower_hex(('0' * 15) + '1')
+        assert 0x80000000000000000L == \
+            codecs.from_lower_hex(('0' * 15) + '8' + ('0' * 16))
+
     def test_extract_root_span(self):
         codec = codecs.B3Codec()
         carrier = self._make_b3_carrier(trace_id=1, span_id=1, parent_id=0,

@@ -26,7 +26,7 @@ setup(
     name='jaeger-client-contrib',
     version=version,
     url='https://github.com/timonwong/jaeger-client-python-contrib',
-    description='Utilities for Jaeger Python Client',
+    description='Addons for Jaeger Python Client',
     long_description=long_description,
     author='Timon Wong',
     author_email='timon86.wang@gmail.com',

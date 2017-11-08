@@ -34,7 +34,7 @@ setup(
     include_package_data=True,
     license="MIT",
     zip_safe=False,
-    keywords='jaeger, tracing, opentracing',
+    keywords='jaeger tracing opentracing',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',

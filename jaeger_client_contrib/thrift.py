@@ -9,6 +9,13 @@ from thrift.transport.TTransport import TMemoryBuffer
 from .thrift_gen.zipkincore import ttypes as zipkin_types
 
 
+def extract_from_trace_id(trace_id):
+    """Extract high and low 64 bit parts from trace_id"""
+    hi = trace_id >> 64
+    lo = trace_id & 0xffffffffffffffff
+    return hi, lo
+
+
 def make_zipkin_spans(spans):
     zipkin_spans = []
     for span in spans:
@@ -20,9 +27,10 @@ def make_zipkin_spans(spans):
             event.host = endpoint
         with span.update_lock:
             add_zipkin_annotations(span=span, endpoint=endpoint)
+            hi, lo = extract_from_trace_id(span.trace_id)
             zipkin_span = zipkin_types.Span(
-                trace_id=id_to_int(span.trace_id & 0xffffffffffffffffL),
-                trace_id_high=id_to_int(span.trace_id >> 64),
+                trace_id=id_to_int(lo),
+                trace_id_high=id_to_int(hi),
                 name=span.operation_name,
                 id=id_to_int(span.span_id),
                 parent_id=id_to_int(span.parent_id) or None,

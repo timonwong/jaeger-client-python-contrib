@@ -1,6 +1,7 @@
 import mock
 import pytest
-from jaeger_client import ConstSampler, Tracer
+from jaeger_client import ConstSampler
+from jaeger_client_contrib.tracer import Tracer
 
 
 @pytest.fixture(scope='function')

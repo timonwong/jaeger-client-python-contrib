@@ -9,7 +9,7 @@ from jaeger_client import constants as c
 from jaeger_client import ConstSampler
 from jaeger_client.thrift import add_zipkin_annotations
 from jaeger_client_contrib.thrift_gen.zipkincore import constants as g
-from jaeger_client_contrib.tracer import Tracer
+from jaeger_client_contrib import Tracer
 from opentracing import Format, child_of
 from opentracing.ext import tags as ext_tags
 

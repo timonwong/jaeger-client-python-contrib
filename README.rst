@@ -1,5 +1,5 @@
-Addons for Jaeger Python Client
-===============================
+Jaeger Python Client with Zipkin
+================================
 
 
 Install

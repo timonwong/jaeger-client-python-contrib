@@ -3,7 +3,7 @@
 import os
 import re
 
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 version = None
 with open('jaeger_client_contrib/__init__.py', 'r') as f:
@@ -43,22 +43,25 @@ setup(
         'Programming Language :: Python :: 2.7',
     ],
     install_requires=[
-        'jaeger-client',
-        # we want thrift>=0.9.2.post1,<0.9.3, but we let the users pin to that
+        'jaeger-client>=3.8.0',
         'thrift',
         'tornado>=4.3,<5',
+        'opentracing>=1.2.2,<2',
     ],
     test_suite='tests',
     extras_require={
+        ':python_version<"3"': [
+            'futures',
+        ],
         'tests': [
             'mock==1.0.1',
-            'pytest>=2.7,<3',
+            'pytest>=3.6.0',
             'pytest-cov',
-            'coverage',
+            'coverage<4.4',  # can remove after https://bitbucket.org/ned/coveragepy/issues/581/44b1-44-breaking-in-ci
             'pytest-timeout',
             'pytest-tornado',
             'pytest-benchmark[histogram]>=3.0.0rc1',
-            'flake8',
+            'flake8<3',  # see https://github.com/zheller/flake8-quotes/issues/29
             'flake8-quotes',
             'codecov',
         ]

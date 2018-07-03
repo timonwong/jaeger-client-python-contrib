@@ -1,11 +1,11 @@
 from __future__ import absolute_import
 
-from jaeger_client.thrift import (add_zipkin_annotations, id_to_int,
-                                  make_endpoint, timestamp_micros)
 from thrift.protocol.TBinaryProtocol import TBinaryProtocol
 from thrift.Thrift import TType
 from thrift.transport.TTransport import TMemoryBuffer
 
+from .jaeger_thrift import (add_zipkin_annotations, id_to_int, make_endpoint,
+                            timestamp_micros)
 from .thrift_gen.zipkincore import ttypes as zipkin_types
 
 

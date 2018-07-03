@@ -2,7 +2,6 @@ from __future__ import absolute_import
 
 import os
 import uuid
-from builtins import int
 
 import jaeger_client
 import six
@@ -11,12 +10,25 @@ from jaeger_client.span import DEBUG_FLAG, SAMPLED_FLAG
 from opentracing.ext import tags as ext_tags
 
 
+if six.PY2:
+    def from_bytes(b):
+        """Return the integer represented by the given array of bytes."""
+        if len(b) == 0:
+            b = b'\x00'
+        num = int(b.encode('hex'), 16)
+        return num
+else:
+    def from_bytes(b):
+        """Return the integer represented by the given array of bytes."""
+        return int.from_bytes(b)
+
+
 class Tracer(jaeger_client.Tracer):
     def random_trace_id(self):
         return uuid.uuid1().int
 
     def random_id(self):
-        return int.from_bytes(os.urandom(8))
+        return from_bytes(os.urandom(8))
 
     def start_span(self,
                    operation_name=None,

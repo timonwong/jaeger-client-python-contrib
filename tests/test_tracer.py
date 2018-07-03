@@ -1,5 +1,4 @@
 import uuid
-from builtins import int
 
 import mock
 import pytest
@@ -7,9 +6,9 @@ import six
 import tornado.httputil
 from jaeger_client import constants as c
 from jaeger_client import ConstSampler
-from jaeger_client.thrift import add_zipkin_annotations
-from jaeger_client_contrib.thrift_gen.zipkincore import constants as g
 from jaeger_client_contrib import Tracer
+from jaeger_client_contrib.jaeger_thrift import add_zipkin_annotations
+from jaeger_client_contrib.thrift_gen.zipkincore import constants as g
 from opentracing import Format, child_of
 from opentracing.ext import tags as ext_tags
 
@@ -18,11 +17,21 @@ def log_exists(span, value):
     return [x for x in span.logs if x.value == value] != []
 
 
+if six.PY2:
+    def to_bytes(n, length):
+        h = '%x' % n
+        s = ('0'*(len(h) % 2) + h).zfill(length*2).decode('hex')
+        return s
+else:
+    def to_bytes(n, length):
+        return int.to_bytes(n, length)
+
+
 def test_start_trace(tracer):
     assert type(tracer) is Tracer
     with mock.patch('os.urandom') as mock_urandom, mock.patch('time.time') as mock_timestamp, \
             mock.patch('uuid.uuid1') as mock_uuid1:
-        mock_urandom.return_value = int.to_bytes(12345, 8)
+        mock_urandom.return_value = to_bytes(12345, 8)
         mock_timestamp.return_value = 54321
         mock_uuid1.return_value = uuid.UUID(int=987654321)
 

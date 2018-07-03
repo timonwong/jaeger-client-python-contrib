@@ -22,6 +22,8 @@ var
 
 __pycache__
 .cache/
+.pytest_cache/
+.coverage.*
 
 # Installer logs
 pip-log.txt
